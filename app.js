@@ -157,7 +157,7 @@
             return elem.getAttribute('class');
         };
 
-        self.getContainer = function(className) {
+        self.getContainer = function(container, className) {
             var pContainerClassName = className,
                 elem;
 
@@ -172,7 +172,12 @@
                 throw new TypeError(pContainerClassName + errorMsg.typeErrorString);
             }
             
-            elem = document.getElementsByClassName(pContainerClassName)[0];//only first matching
+            if ( container ) {
+                elem = container.querySelectorAll('.' + pContainerClassName)[0];//only first matching
+            }
+            else {
+                elem = document.getElementsByClassName(pContainerClassName)[0];//only first matching
+            }
 
             if ( !elem ) {
                 throw '"' + pContainerClassName + '"' + errorMsg.classNotFoundet;
@@ -180,20 +185,20 @@
             return elem;
         };
 
-        self.setEventListeners = function(elem) {
-            var elems,
-                controllsClassName = 'btn-audio-controls'; // fix hardcode
+        // self.setEventListeners = function(elem) {
+        //     var elems,
+        //         controllsClassName = 'btn-audio-controls'; // fix hardcode
 
-            elems = self.pCont.querySelectorAll('.' + controllsClassName);
-            elems[0].addEventListener('click', self.toggleState, true);
-            elems[1].addEventListener('click', self.toggleState, true);
-        };
+        //     elems = self.pCont.querySelectorAll('.' + controllsClassName);
+        //     elems[0].addEventListener('click', self.toggleState, true);
+        //     elems[1].addEventListener('click', self.toggleState, true);
+        // };
 
         self.initControlls = function() {
-            var btnStop = self.getContainer('btn-stop'),
-                btnPlay = self.getContainer('btn-play'),
-                btnNext = self.getContainer('btn-next'),
-                btnPrev = self.getContainer('btn-prev');
+            var btnStop = self.getContainer(self.pCont, 'btn-stop'),
+                btnPlay = self.getContainer(self.pCont, 'btn-play'),
+                btnNext = self.getContainer(self.pCont, 'btn-next'),
+                btnPrev = self.getContainer(self.pCont, 'btn-prev');
 
             btnStop.addEventListener('mouseup', self.btnOff , true);
             btnStop.addEventListener('mousedown', self.btnOn , true);
@@ -203,11 +208,23 @@
 
             btnNext.addEventListener('mouseup', self.btnOff , true);
             btnNext.addEventListener('mousedown', self.btnOn , true);
-            
+
             btnPrev.addEventListener('mouseup', self.btnOff , true);
             btnPrev.addEventListener('mousedown', self.btnOn , true);
+            self.initVolumeBar();
 // stop, prev, next, play, playlist, volume controll
 // stop , remove pressed state from all controlls ( mouse down pressed, mouse up not pressed)
+        };
+
+        self.initVolumeBar = function() {
+            var pBar = self.getContainer(self.pCont, 'clickable');
+
+            pBar.addEventListener('click', function(event) {
+                var x = event.currentTarget.clientWidth - (event.currentTarget.clientWidth - event.offsetX),
+                    elem = self.getContainer(self.pCont, 'progress');
+
+                elem.style.width = x + "px";
+            }, true);
         };
 
         self.init = function() {
@@ -215,7 +232,7 @@
 
             // self.setEventListeners();
             self.initControlls();
-            console.log(opt.msg ? opt.msg : 'init completed');
+            console.log(opt.pContainerClassName ? '"' + opt.pContainerClassName + '"' + ': init completed': 'init completed');
         };
 
         self.init();

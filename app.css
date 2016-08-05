@@ -1,19 +1,84 @@
 .btn-stop {
     background-image: url("./PNG/stop.png");
+    padding: 1px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 .btn-next {
     background-image: url("./PNG/next-media.png");
+    padding: 1px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 .btn-prev {
     background-image: url("./PNG/previous-media.png");
+    padding: 1px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 .btn-play {
     background-image: url("./PNG/play.png");
+    padding: 1px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 .btn-audio-controls {
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
+    margin: 1px;
+    float: left;
 }
 .btnPressed {
     opacity: 0.7;
+}
+.playa-container {
+    width: 400px;
+    height: 100px;
+    padding: 5px;
+    position: relative;
+}
+.playa-container1 {
+    width: 400px;
+    height: 100px;
+    padding: 5px;
+    position: relative;
+}
+.playa-controlls-cont {
+    width: 98px;
+    height: 31px;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    box-sizing: border-box;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    border: 1px solid black;
+}
+.clickable {
+    border: 1px solid #333;
+    background: #eee;
+    width: 96px;
+    height: 4px;
+    bottom: 1px;
+    box-sizing: border-box;
+/*    margin: 15px;*/
+    position: absolute;
+}
+.display {
+    height: 3px;
+    position: absolute;
+    width: 100%;
+}
+.progress {
+    position:absolute;
+    left:0;
+    top:0;
+    background:green;
+    height:3px;
+    width:10px;
 }

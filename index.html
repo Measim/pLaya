@@ -6,14 +6,38 @@
     </head>
 
     <body>
-        <div class="player-location">
-            <div class="btn-audio-controls btn-stop"></div>
-            <div class="btn-audio-controls btn-next"></div>
-            <div class="btn-audio-controls btn-play"></div>
-            <div class="btn-audio-controls btn-prev"></div>
+        <div class="playa-container">
+            <div class="playa-controlls-cont">
+                <div class="btn-audio-controls btn-stop"></div>
+                <div class="btn-audio-controls btn-prev"></div>
+                <div class="btn-audio-controls btn-play"></div>
+                <div class="btn-audio-controls btn-next"></div>
+                <div class='clickable'>
+                    <div class='display'>
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
+        <div class="playa-container1">
+            <div class="playa-controlls-cont">
+                <div class="btn-audio-controls btn-stop"></div>
+                <div class="btn-audio-controls btn-prev"></div>
+                <div class="btn-audio-controls btn-play"></div>
+                <div class="btn-audio-controls btn-next"></div>
+                <div class='clickable'>
+                    <div class='display'>
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="app.js"></script>
+        <script>
+            var x = new Playa({pContainerClassName :'playa-container'});
+            var y = new Playa({pContainerClassName :'playa-container1'});
+        </script>
     </body>
 
 </html>
