@@ -1,0 +1,19 @@
+.btn-stop {
+    background-image: url("./PNG/stop.png");
+}
+.btn-next {
+    background-image: url("./PNG/next-media.png");
+}
+.btn-prev {
+    background-image: url("./PNG/previous-media.png");
+}
+.btn-play {
+    background-image: url("./PNG/play.png");
+}
+.btn-audio-controls {
+    width: 40px;
+    height: 40px;
+}
+.btnPressed {
+    opacity: 0.7;
+}
