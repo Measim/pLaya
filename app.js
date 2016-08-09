@@ -24,6 +24,9 @@
 
     return function(opt) {
         var self = this,
+            defaults = {
+                expireDays: 10
+            },
             errorMsg = {
                 classNotFoundet: ' class not found',
                 undefinedClassName: ' class name unscpecified in options',
@@ -193,6 +196,31 @@
         //     elems[0].addEventListener('click', self.toggleState, true);
         //     elems[1].addEventListener('click', self.toggleState, true);
         // };
+        self.setCookie = function(property, value, exdays) {
+            var today = new Date(),
+                expires,
+                expireDays = exdays || defaults.expireDays;
+
+            today.setTime(today.getTime() + (expireDays * 24 * 60 * 60 * 1000));
+            expires = 'expires=' + today.toUTCString();
+            document.cookie = property + '=' + value + '; ' + expires;
+        };
+
+        self.getCookie = function(cname) {
+            var name = cname + '=',
+                ca = document.cookie.split(';');
+
+            for ( var i = 0; i < ca.length; i++ ) {
+                var c = ca[i];
+                while ( c.charAt(0) == ' ' ) {
+                    c = c.substring(1);
+                }
+                if ( c.indexOf(name) === 0 ) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return '';
+        };
 
         self.initControlls = function() {
             var btnStop = self.getContainer(self.pCont, 'btn-stop'),
@@ -217,13 +245,18 @@
         };
 
         self.initVolumeBar = function() {
-            var pBar = self.getContainer(self.pCont, 'clickable');
+            var pBar = self.getContainer(self.pCont, 'clickable'),
+                elem = self.getContainer(self.pCont, 'progress'),
+                volumeWrapper = self.getContainer(self.pCont, 'display');
 
+            elem.style.width = volumeWrapper.clientWidth * self.getCookie('pLayaVolume') + 'px';
             pBar.addEventListener('click', function(event) {
-                var x = event.currentTarget.clientWidth - (event.currentTarget.clientWidth - event.offsetX),
-                    elem = self.getContainer(self.pCont, 'progress');
+                var clientWidth = event.currentTarget.clientWidth,
+                    x = clientWidth - (clientWidth - event.offsetX),
+                    volume = (x / clientWidth).toFixed(2);
 
-                elem.style.width = x + "px";
+                self.setCookie('pLayaVolume', volume, defaults.expireDays);
+                elem.style.width = x + 'px';
             }, true);
         };
 
