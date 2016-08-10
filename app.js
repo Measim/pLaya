@@ -77,7 +77,7 @@
 
             return elem;
         };
-
+        //to do add for all elems, (could pass one elem)
         self.addClass = function(elem, classToAdd) {
             var elemClassName = elem.getAttribute('class'),
                 classArray,
@@ -88,7 +88,9 @@
                 classArray[0] = classToAdd;
             }
             else {
-                classArray.push(classToAdd);
+                if ( classArray.indexOf(classToAdd) === -1 ) {
+                    classArray.push(classToAdd);
+                }
             }
             classToApply = classArray.join(' ');
             elem.setAttribute('class', classToApply);
@@ -96,7 +98,7 @@
             return elem;
         };
 
-        //to do remove from all elems, (could pass one elem)
+        
         self.removeClass = function(elem, classToRemove) {
             var classAttr,
                 classArray,
@@ -144,6 +146,23 @@
             var btn = event.currentTarget;
 
             self.addClass(btn, 'btnPressed');
+        };
+
+        self.clearListItemsSelection = function(playListItems) {
+            self.removeClass(playListItems, 'selected');
+        };
+
+        self.onSelectListItem = function(event) {
+            var btn = event.currentTarget,
+                playListItems = self.pCont.querySelectorAll('.' + 'list-item');
+
+            self.clearListItemsSelection(playListItems);
+            self.addClass(btn, 'selected');
+            self.playThisTrack();
+        };
+
+        self.playThisTrack = function() {
+
         };
 
         self.clearControlls = function(event) {
@@ -226,7 +245,8 @@
             var btnStop = self.getContainer(self.pCont, 'btn-stop'),
                 btnPlay = self.getContainer(self.pCont, 'btn-play'),
                 btnNext = self.getContainer(self.pCont, 'btn-next'),
-                btnPrev = self.getContainer(self.pCont, 'btn-prev');
+                btnPrev = self.getContainer(self.pCont, 'btn-prev'),
+                playListItems = self.pCont.querySelectorAll('.' + 'list-item');
 
             btnStop.addEventListener('mouseup', self.btnOff , true);
             btnStop.addEventListener('mousedown', self.btnOn , true);
@@ -239,6 +259,10 @@
 
             btnPrev.addEventListener('mouseup', self.btnOff , true);
             btnPrev.addEventListener('mousedown', self.btnOn , true);
+
+            forEach(playListItems, function(item) {
+                item.addEventListener('mousedown', self.onSelectListItem , true);
+            });
             self.initVolumeBar();
 // stop, prev, next, play, playlist, volume controll
 // stop , remove pressed state from all controlls ( mouse down pressed, mouse up not pressed)
@@ -250,6 +274,7 @@
                 volumeWrapper = self.getContainer(self.pCont, 'display');
 
             elem.style.width = volumeWrapper.clientWidth * self.getCookie('pLayaVolume') + 'px';
+
             pBar.addEventListener('click', function(event) {
                 var clientWidth = event.currentTarget.clientWidth,
                     x = clientWidth - (clientWidth - event.offsetX),
@@ -272,5 +297,3 @@
 
     };
 }));
-
-

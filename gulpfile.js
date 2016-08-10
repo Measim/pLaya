@@ -18,9 +18,14 @@ gulp.task('js', function () {
   gulp.src('./*.js')
     .pipe(connect.reload());
 });
+
+gulp.task('css', function () {
+  gulp.src('./*.css')
+    .pipe(connect.reload());
+});
  
 gulp.task('watch', function () {
-  gulp.watch(['./*.html', './*.js'], ['html', 'js']);
+  gulp.watch(['./*.html', './*.js', './*.css'], ['html', 'js', 'css']);
 });
  
 gulp.task('default', ['connect', 'watch']);
