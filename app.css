@@ -30,6 +30,16 @@
     background-position: center center;
 }
 
+.btn-volume {
+    width: 10px;
+    height: 10px;
+    background-image: url("./PNG/speaker.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: absolute;
+}
+
 .btn-audio-controls {
     width: 20px;
     height: 20px;
@@ -37,10 +47,13 @@
     display: inline-block;
 }
 
-.btn-volume {
+.btn-pl-list {
     width: 10px;
     height: 10px;
-    background-image: url("./PNG/speaker.png");
+    background-image: url("./PNG/list-3.png");
+    position: absolute;
+    right: 2px;
+    /*float: right;*/
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -65,34 +78,43 @@
 }
 
 .playa-controlls-cont {
-    height: 44px;
+    height: 50px;
     position:absolute;
+    padding-right: 10px;
     top: 50%;
     left: 50%;
     box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 5px;
+    background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    border: 1px solid black;
-    background: linear-gradient(141deg, #0fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
-    border-radius: 5px;
+}
+
+.audio-controlls-wrapper {
+    display: inline-block;
+    height: 24px;
     padding: 4px 2px 2px 2px;
 }
 
 .volume-wrap {
-
+    height: 14px;
+    width: 100%;
+    padding-left: 3px;
+    position: relative;
 }
 
 .clickable {
+    width: 80%;
+    height: 4px;
     border: 1px solid #333;
     border-radius: 2px;
     background: #eee;
-    width: 80%;
-    height: 4px;
-    bottom: 4px;
+    position: absolute;
+    top: 3px;
     margin-left: 12px;
     box-sizing: border-box;
-    position: absolute;
 }
 
 .display {
@@ -103,9 +125,6 @@
 .progress {
     height:3px;
     width:10px;
-    position:absolute;
-    left:0;
-    top:0;
     background: -moz-linear-gradient(top, #b5bdc8 0%, #828c95 36%, #28343b 100%);
     background: -webkit-linear-gradient(top, #b5bdc8 0%,#828c95 36%,#28343b 100%);
     background: linear-gradient(to bottom, #b5bdc8 0%,#828c95 36%,#28343b 100%);
@@ -147,4 +166,8 @@
 .list-item.selected {
     /*background-color: grey;*/
     opacity: 0.5;
+}
+
+.hidden {
+    display: none;
 }
