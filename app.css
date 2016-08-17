@@ -161,6 +161,12 @@
 
 .list-item span {
     overflow: hidden;
+    cursor: pointer;
+}
+
+.list-item:hover {
+    color: white;
+    font-weight: bold;
 }
 
 .list-item.selected {

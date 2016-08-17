@@ -34,6 +34,7 @@
             };
 
         self.pCont = {};
+        self.audio = {};
 
         function forEach(arr, callback, thisArg) {
             var arrValue,
@@ -55,10 +56,10 @@
             return output;
         }
 
-        self.toggleState = function(event) {
+        self.toggleBtnState = function(event) {
             var btnToggle = event.currentTarget;
 
-                console.error(self.toggleClass(btnToggle, 'btnPressed'));
+            self.toggleClass(btnToggle, 'btnPressed');
         };
 
         self.toggleClass = function(elem, className) {
@@ -97,7 +98,6 @@
 
             return elem;
         };
-
         
         self.removeClass = function(elem, classToRemove) {
             var classAttr,
@@ -148,6 +148,11 @@
             self.addClass(btn, 'btnPressed');
         };
 
+        self.onBtnPlay = function(event) {
+            self.toggleBtnState(event);
+            self.toglePlay();
+        };
+
         self.clearListItemsSelection = function(playListItems) {
             self.removeClass(playListItems, 'selected');
         };
@@ -158,18 +163,74 @@
 
             self.clearListItemsSelection(playListItems);
             self.addClass(btn, 'selected');
-            self.playThisTrack();
+            self.setCurrentTrack(self.getSelectedTrack(btn));
         };
 
-        self.onPlayListClick = function(event) {
+        self.onPlayListToggle = function(event) {
             var playList = self.getContainer(self.pCont, 'play-list-container');
 
-            self.toggleState(event);
+            self.toggleBtnState(event);
             self.toggleClass(playList, 'hidden');
         };
 
-        self.playThisTrack = function() {
-            // abstract method add later
+        self.toglePlay = function() {
+            if ( self.audio.paused === true ) {
+                self.playAudio();
+            }
+            else {
+                self.pauseAudio();
+            }
+        };
+
+        self.getSelectedTrack = function(elem) {
+            var track = elem.getAttribute('data-track');
+
+            return track;
+        };
+
+        self.getFirstTrackFromList =  function() {
+            var playListItems = self.pCont.querySelectorAll('.' + 'list-item'),
+                currentTrack = '';
+
+            if ( playListItems.length ) {
+                currentTrack = self.getSelectedTrack(playListItems[0]);
+            }
+
+            return currentTrack;
+        };
+
+        self.setCurrentTrack = function(audioSrc) {
+            self.audio.setAttribute('src', audioSrc);
+        };
+
+        self.playAudio = function() {
+            var audioSrc;
+
+            audioSrc = self.audio.getAttribute('src');
+
+            if ( audioSrc ) {
+                self.audio.play();
+            }
+            else {
+                audioSrc = self.getFirstTrackFromList();
+                if ( audioSrc ) {
+                    self.setCurrentTrack(audioSrc);
+                    self.audio.play();
+                }
+            }
+        };
+
+        self.pauseAudio = function() {
+            self.audio.pause();
+        };
+
+        self.onStopPlay = function() {
+            self.audio.currentTime = 0;
+            self.pauseAudio();
+        };
+
+        self.setVolume = function(volume) {
+            self.audio.volume = volume;
         };
 
         self.clearControlls = function(event) {
@@ -259,8 +320,9 @@
             btnStop.addEventListener('mouseup', self.btnOff , true);
             btnStop.addEventListener('mousedown', self.btnOn , true);
             btnStop.addEventListener('mouseup', self.clearControlls , true);
+            btnStop.addEventListener('click', self.onStopPlay, true);
 
-            btnPlay.addEventListener('click', self.toggleState, true);
+            btnPlay.addEventListener('click', self.onBtnPlay, true);
 
             btnNext.addEventListener('mouseup', self.btnOff , true);
             btnNext.addEventListener('mousedown', self.btnOn , true);
@@ -268,7 +330,7 @@
             btnPrev.addEventListener('mouseup', self.btnOff , true);
             btnPrev.addEventListener('mousedown', self.btnOn , true);
 
-            btnPlayList.addEventListener('click', self.onPlayListClick, true);
+            btnPlayList.addEventListener('click', self.onPlayListToggle, true);
 
             forEach(playListItems, function(item) {
                 item.addEventListener('mousedown', self.onSelectListItem , true);
@@ -292,6 +354,7 @@
 
                 self.setCookie('pLayaVolume', volume, defaults.expireDays);
                 elem.style.width = x + 'px';
+                self.setVolume(volume);
             }, true);
         };
 
@@ -299,6 +362,7 @@
             self.pCont = self.getContainer();
 
             // self.setEventListeners();
+            self.audio = new Audio();
             self.initControlls();
             console.log(opt.pContainerClassName ? '"' + opt.pContainerClassName + '"' + ': init completed': 'init completed');
         };
