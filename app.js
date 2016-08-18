@@ -11,21 +11,28 @@
             window.Playa.bind(Playa);
         }
 }(function () {
-    // $(document).ready(function($) {
-    // // function to load a given css file 
-    //     loadCSS = function(href) {
-    //         var cssLink = $("<link rel='stylesheet' type='text/css' href='" + href + "'>");
-    //         $("head").append(cssLink); 
-    //     };  
-    // // load the css file 
-    //     loadCSS(Config.DOMAIN_URL + "external/js/lib/owo-drange-picker/date-range.css");
-
-    // });
 
     return function(opt) {
         var self = this,
             defaults = {
-                expireDays: 10
+                expireDays: 10,
+                pName: 'pLaya'
+            },
+            selectors = {
+                btnOn: 'btn-on',
+                playBtn: 'btn-play',
+                selectedLiItem: 'selected',
+                pLContainer: 'play-list-container',
+                plList: 'play-list',
+                liItems: 'list-item',
+                audioBtnControlls: 'btn-audio-controls',
+                btnStop: 'btn-stop',
+                btnNext: 'btn-next',
+                btnPrev: 'btn-prev',
+                btnPlList: 'btn-pl-list',
+                vlmProgressBarWrap: 'vlm-progress-bar-wrap',
+                vlmProgressBar: 'vlm-progress-bar',
+                vlmProgressBarContainer: 'vlm-progress-bar-container'
             },
             errorMsg = {
                 classNotFoundet: ' class not found',
@@ -59,7 +66,7 @@
         self.toggleBtnState = function(event) {
             var btnToggle = event.currentTarget;
 
-            self.toggleClass(btnToggle, 'btnPressed');
+            self.toggleClass(btnToggle, selectors.btnOn);
         };
 
         self.toggleClass = function(elem, className) {
@@ -146,13 +153,13 @@
         self.btnOff = function(event) {
             var btn = event.currentTarget;
 
-            self.removeClass(btn, 'btnPressed');
+            self.removeClass(btn, selectors.btnOn);
         };
 
         self.btnOn = function(event) {
             var btn = event.currentTarget;
 
-            self.addClass(btn, 'btnPressed');
+            self.addClass(btn, selectors.btnOn);
         };
 
         self.onBtnPlay = function(event) {
@@ -161,23 +168,23 @@
         };
 
         self.clearListItemsSelection = function(playListItems) {
-            self.removeClass(playListItems, 'selected');
+            self.removeClass(playListItems, selectors.selectedLiItem);
         };
 
         self.onSelectListItem = function(event) {
-            var btn = event.currentTarget,
-                playListItems = self.pCont.querySelectorAll('.' + 'list-item'),
-                btnPlay = self.getContainer(self.pCont, 'btn-play');
+            var elem = event.target.parentElement,
+                playListItems = self.getPListItems(),
+                btnPlay = self.getContainer(self.pCont, selectors.playBtn);
 
             self.clearListItemsSelection(playListItems);
-            self.addClass(btn, 'selected');
-            self.setCurrentTrack(self.getSelectedAudioSrc(btn));
-            self.addClass(btnPlay, 'btnPressed');
+            self.addClass(elem, selectors.selectedLiItem);
+            self.setCurrentTrack(self.getSelectedAudioSrc(elem));
+            self.addClass(btnPlay, selectors.btnOn);
             self.playAudio();
         };
 
         self.onPlayListToggle = function(event) {
-            var playList = self.getContainer(self.pCont, 'play-list-container');
+            var playList = self.getContainer(self.pCont, selectors.pLContainer);
 
             self.toggleBtnState(event);
             self.toggleClass(playList, 'hidden');
@@ -250,15 +257,14 @@
                 btnPlay;
 
             if ( !isNaN(selectedIndex) && playListItems.length > selectedIndex + 1 ) {
-                btnPlay = self.getContainer(self.pCont, 'btn-play');
+                btnPlay = self.getContainer(self.pCont, selectors.playBtn);
                 nextItem = playListItems[selectedIndex + 1];
-                self.removeClass(playListItems, 'selected');
-                self.addClass(nextItem, 'selected');
-                self.addClass(btnPlay, 'btnPressed');
+                self.removeClass(playListItems, selectors.selectedLiItem);
+                self.addClass(nextItem, selectors.selectedLiItem);
+                self.addClass(btnPlay, selectors.btnOn);
                 self.setCurrentTrack(self.getSelectedAudioSrc(nextItem));
                 self.playAudio();
             }
-
         };
 
         self.onBtnPrev = function() {
@@ -267,12 +273,12 @@
                 prevItem,
                 btnPlay;
 
-            if (  !isNaN(selectedIndex) && selectedIndex - 1 >= 0 ) {
-                btnPlay = self.getContainer(self.pCont, 'btn-play');
+            if ( !isNaN(selectedIndex) && selectedIndex - 1 >= 0 ) {
+                btnPlay = self.getContainer(self.pCont, selectors.playBtn);
                 prevItem = playListItems[selectedIndex - 1];
-                self.removeClass(playListItems, 'selected');
-                self.addClass(prevItem, 'selected');
-                self.addClass(btnPlay, 'btnPressed');
+                self.removeClass(playListItems, selectors.selectedLiItem);
+                self.addClass(prevItem, selectors.selectedLiItem);
+                self.addClass(btnPlay, selectors.btnOn);
                 self.setCurrentTrack(self.getSelectedAudioSrc(prevItem));
                 self.playAudio();
             }
@@ -283,23 +289,21 @@
                 index;
 
             for ( index = 0; index < items.length; index++ ) {
-                if ( self.hasClass(items[index], 'selected') ) {
+                if ( self.hasClass(items[index], selectors.selectedLiItem) ) {
                     selectedIndex = index;
                     break;
                 }
             }
 
             return selectedIndex;
-        }
+        };
 
         self.getPListItems = function() {
-            return self.pCont.querySelectorAll('.' + 'list-item');
-        }
+            return self.pCont.querySelectorAll('.' + selectors.liItems);
+        };
 
         self.clearControlls = function() {
-            var controllsClassName = 'btn-audio-controls'; // fix it - move to 1 plase on init
-
-            self.removeClass(self.pCont.querySelectorAll('.' + controllsClassName), 'btnPressed');
+            self.removeClass(self.pCont.querySelectorAll('.' + selectors.audioBtnControlls), selectors.btnOn);
         };
 
         self.fixNullClass = function(elem, classAttr) {
@@ -365,52 +369,42 @@
         };
 
         self.initControlls = function() {
-            var btnStop = self.getContainer(self.pCont, 'btn-stop'),
-                btnPlay = self.getContainer(self.pCont, 'btn-play'),
-                btnNext = self.getContainer(self.pCont, 'btn-next'),
-                btnPrev = self.getContainer(self.pCont, 'btn-prev'),
-                btnPlayList = self.getContainer(self.pCont, 'btn-pl-list'),
-                playListItems = self.getPListItems();
+            var btnStop = self.getContainer(self.pCont, selectors.btnStop),
+                btnPlay = self.getContainer(self.pCont, selectors.playBtn),
+                btnNext = self.getContainer(self.pCont, selectors.btnNext),
+                btnPrev = self.getContainer(self.pCont, selectors.btnPrev),
+                btnPlayList = self.getContainer(self.pCont, selectors.btnPlList),
+                playList = self.pCont.querySelectorAll('.' + selectors.plList)[0];
 
             btnStop.addEventListener('mouseup', self.btnOff, true);
             btnStop.addEventListener('mousedown', self.btnOn, true);
             btnStop.addEventListener('mouseup', self.clearControlls , true);
             btnStop.addEventListener('click', self.onStopPlay, true);
-
             btnPlay.addEventListener('click', self.onBtnPlay, true);
-
             btnNext.addEventListener('mouseup', self.btnOff, true);
             btnNext.addEventListener('mousedown', self.btnOn, true);
             btnNext.addEventListener('mouseup', self.onBtnNext, true);
-
             btnPrev.addEventListener('mouseup', self.btnOff, true);
             btnPrev.addEventListener('mousedown', self.btnOn, true);
             btnPrev.addEventListener('mouseup', self.onBtnPrev, true);
-
-
             btnPlayList.addEventListener('click', self.onPlayListToggle, true);
-
-            forEach(playListItems, function(item) {// to to add only 1 event on pList
-                item.addEventListener('mousedown', self.onSelectListItem, true);
-            });
+            playList.addEventListener('mousedown', self.onSelectListItem, true);
             self.initVolumeBar();
-// stop, prev, next, play, playlist, volume controll
-// stop , remove pressed state from all controlls ( mouse down pressed, mouse up not pressed)
         };
 
         self.initVolumeBar = function() {
-            var pBar = self.getContainer(self.pCont, 'clickable'),
-                elem = self.getContainer(self.pCont, 'progress'),
-                volumeWrapper = self.getContainer(self.pCont, 'display');
+            var pBar = self.getContainer(self.pCont, selectors.vlmProgressBarWrap),
+                elem = self.getContainer(self.pCont, selectors.vlmProgressBar),
+                volumeWrapper = self.getContainer(self.pCont, selectors.vlmProgressBarContainer);
 
-            elem.style.width = volumeWrapper.clientWidth * self.getCookie('pLayaVolume') + 'px';
+            elem.style.width = volumeWrapper.clientWidth * self.getCookie(defaults.pName + 'Volume') + 'px';
 
             pBar.addEventListener('click', function(event) {
                 var clientWidth = event.currentTarget.clientWidth,
                     x = clientWidth - (clientWidth - event.offsetX),
                     volume = (x / clientWidth).toFixed(2);
 
-                self.setCookie('pLayaVolume', volume, defaults.expireDays);
+                self.setCookie(defaults.pName + 'Volume', volume, defaults.expireDays);
                 elem.style.width = x + 'px';
                 self.setVolume(volume);
             }, true);
@@ -419,7 +413,6 @@
         self.init = function() {
             self.pCont = self.getContainer();
 
-            // self.setEventListeners();
             self.audio = new Audio();
             self.initControlls();
             console.log(opt.pContainerClassName ? '"' + opt.pContainerClassName + '"' + ': init completed': 'init completed');

@@ -59,7 +59,7 @@
     background-position: center center;
 }
 
-.btnPressed {
+.btn-on {
     opacity: 0.7;
 }
 
@@ -105,7 +105,7 @@
     position: relative;
 }
 
-.clickable {
+.vlm-progress-bar-wrap {
     width: 80%;
     height: 4px;
     border: 1px solid #333;
@@ -117,12 +117,12 @@
     box-sizing: border-box;
 }
 
-.display {
+.vlm-progress-bar-container {
     height: 3px;
     width: 100%;
 }
 
-.progress {
+.vlm-progress-bar {
     height:3px;
     width:10px;
     background: -moz-linear-gradient(top, #b5bdc8 0%, #828c95 36%, #28343b 100%);
@@ -131,7 +131,7 @@
 }
 
 .play-list-container {
-    width: 92px;
+    width: 102px;
     height: 45px;
     border-radius: 3px 3px 3px 3px;
     box-sizing: border-box;
@@ -152,10 +152,10 @@
 
 .play-list {
     height: 35px;
-    width: 65px;
+    width: 75px;
     margin: 0px 0px 5px 5px;
     padding: 0px 0px 0px 10px;
-    font-size: 6px;
+    font-size: 9px;
     overflow: auto;
 }
 
